@@ -23,6 +23,7 @@ spring:
         format_sql: true
   application:
     name: auth-service
+
 server:
   port: 8081
 

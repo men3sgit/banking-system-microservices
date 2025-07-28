@@ -28,5 +28,5 @@ public class KycInfo {
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Profile user;
 }
