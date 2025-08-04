@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "profles")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -23,12 +23,9 @@ public class Profile {
     private String username;
 
     @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
     private boolean isVerified = false;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL)
     private KycInfo kycInfo;
 
 }

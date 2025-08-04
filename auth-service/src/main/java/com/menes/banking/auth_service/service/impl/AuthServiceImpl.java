@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Transactional
@@ -24,13 +23,13 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalArgumentException("Email already in use");
         }
 
-        Profile user = Profile.builder()
+        Profile newProfile = Profile.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
                 .build();
 
-        userRepository.save(user);
+        userRepository.save(newProfile);
+
         return new RegisterResponse("User registered successfully");
     }
 

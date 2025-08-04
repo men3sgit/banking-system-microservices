@@ -27,6 +27,6 @@ public class KycInfo {
     private KycStatus status;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
-    private Profile user;
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
 }
