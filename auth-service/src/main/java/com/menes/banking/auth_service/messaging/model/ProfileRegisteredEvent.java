@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserRegisteredEvent {
+public class ProfileRegisteredEvent {
 
     private String email;
 

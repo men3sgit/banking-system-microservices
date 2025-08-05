@@ -9,6 +9,5 @@ public class KycRequest {
     private String idNumber;
     private LocalDate dob;
     private String address;
-    private String frontImageUrl;
-    private String backImageUrl;
+    private String imageUrl;
 }

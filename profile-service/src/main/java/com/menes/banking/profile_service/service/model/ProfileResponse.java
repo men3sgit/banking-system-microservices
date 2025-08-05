@@ -55,9 +55,9 @@ public class ProfileResponse {
                 .onBoardingChannel(profile.getOnBoardingChannel())
                 .createdDate(profile.getCreatedDate())
                 .updatedDate(profile.getUpdatedDate())
-                .addresses(addresses != null
-                        ? addresses.stream().map(AddressResponse::fromEntity).collect(Collectors.toList())
-                        : null)
+//                .addresses(addresses != null
+//                        ? addresses.stream().map(AddressResponse::fromEntity).collect(Collectors.toList())
+//                        : null)
                 .build();
     }
 }

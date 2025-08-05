@@ -1,4 +1,4 @@
-package com.menes.banking.auth_service.messaging;
+package com.menes.banking.auth_service.messaging.consumer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.support.Acknowledgment;
@@ -20,11 +20,11 @@ public abstract class KafkaBaseConsumer implements Consumer<Message<String>> {
             sendToQueue(payload);
             ack(message);
         } catch (Exception ex) {
-            log.error("HP_ERROR while processing message at message offset={} and partition={} for consumer_group={} with ex {}",
+            log.error("HP_ERROR while processing message at message offset={} and partition={} for consumer_group={} with ex={}",
                     message.getHeaders().get(KafkaHeaders.OFFSET),
                     message.getHeaders().get(KafkaHeaders.RECEIVED_PARTITION),
                     message.getHeaders().get(KafkaHeaders.GROUP_ID),
-                    ex);
+                    ex.toString());
             nack(message);
         }
     }

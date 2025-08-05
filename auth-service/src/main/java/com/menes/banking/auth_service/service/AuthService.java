@@ -13,4 +13,5 @@ public interface AuthService {
 
     void logout(LogoutRequest request);
 
+    void callProfileClient(String request);
 }

@@ -33,7 +33,9 @@ public class Event<D, C> {
     @NotBlank
     private String source;
 
+    private AckQueueType  ackQueueType;
+
     public enum AckQueueType {
-        KAFKA, RABBITMQ
+        KAFKA, RABBITMQ, SQS
     }
 }

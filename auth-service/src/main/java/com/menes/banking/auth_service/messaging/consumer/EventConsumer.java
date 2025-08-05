@@ -1,4 +1,4 @@
-package com.menes.banking.auth_service.messaging;
+package com.menes.banking.auth_service.messaging.consumer;
 
 import com.menes.banking.auth_service.messaging.model.Event;
 import com.menes.banking.auth_service.service.EventService;

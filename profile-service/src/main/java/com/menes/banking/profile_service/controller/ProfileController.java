@@ -4,6 +4,7 @@ import com.menes.banking.profile_service.controller.model.KycRequest;
 import com.menes.banking.profile_service.service.ProfileService;
 import com.menes.banking.profile_service.service.model.ProfileResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/api/v1/profiles")
 @RequiredArgsConstructor
+@Slf4j
 public class ProfileController {
 
     private final ProfileService profileService;
@@ -43,4 +45,17 @@ public class ProfileController {
         profileService.rejectKyc(profileId, reason);
         return ResponseEntity.ok("KYC rejected: " + reason);
     }
+
+    @GetMapping(path = "/exists/phone")
+    public ResponseEntity<?> verifyProfileExistsByPhone(@RequestParam String phone) {
+        log.info("Call verifyProfileExists api with phone={}", phone);
+        return ResponseEntity.ok(Boolean.TRUE);
+    }
+
+    @GetMapping(path = "/exists/email")
+    public ResponseEntity<?> verifyProfileExistsByEmail(@RequestParam String email) {
+        log.info("Call verifyProfileExists api with email={}", email);
+        return ResponseEntity.ok(Boolean.TRUE);
+    }
+
 }
