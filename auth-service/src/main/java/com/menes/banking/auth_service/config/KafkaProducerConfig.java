@@ -1,6 +1,5 @@
 package com.menes.banking.auth_service.config;
 
-import lombok.Getter;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,13 +32,4 @@ public class KafkaProducerConfig {
     public KafkaTemplate<String, Object> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
-
-    public static void main(String[] args) {
-        System.out.println(new D().getId());
-
-    }
-}
-@Getter
-class D{
-    private String id = "skbfsdfsd";
 }

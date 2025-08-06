@@ -1,5 +1,7 @@
 package com.menes.banking.auth_service.messaging.producer;
 
+import com.menes.banking.auth_service.messaging.model.EventType;
+import com.menes.banking.auth_service.messaging.model.OtpNotificationEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -10,15 +12,27 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class KafkaProfileProducer {
 
-    private static final String PROFILE_TOPIC = "user.profile";
+    private static final String OTP_NOTIFICATION_TOPIC = "otp-events";
+
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public void publishProfileEvent(Object profileEvent) {
+
+    /**
+     * Publish OTP notification event
+     */
+    public void publishOtpNotification(OtpNotificationEvent otpEvent) {
+        sendMessage(OTP_NOTIFICATION_TOPIC, otpEvent, EventType.OTP_NOTIFICATION);
+    }
+
+    /**
+     * Generic send logic
+     */
+    private void sendMessage(String topic, Object payload, EventType eventType) {
         try {
-            kafkaTemplate.send(PROFILE_TOPIC, profileEvent);
-            log.info("Published Profile Event to topic={} with payload={}", PROFILE_TOPIC, profileEvent);
+            kafkaTemplate.send(topic, payload);
+            log.info("✅ Published {} to topic={} with payload={}", eventType, topic, payload);
         } catch (Exception ex) {
-            log.error("Failed to publish Profile Event: {}", ex.getMessage(), ex);
+            log.error("❌ Failed to publish {}: {}", eventType, ex.getMessage(), ex);
         }
     }
 }

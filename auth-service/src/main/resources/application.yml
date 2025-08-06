@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: localhost:9191
+    bootstrap-servers: localhost:9092
   datasource:
     url: jdbc:postgresql://localhost:5432/auth_db
     username: postgres
@@ -17,8 +17,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -40,9 +39,14 @@ spring:
             connectTimeout: 2000
             readTimeout: 5000
 
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 2000
+
 
 server:
-  port: 8080
+  port: 8090
 
 logging:
   level:
