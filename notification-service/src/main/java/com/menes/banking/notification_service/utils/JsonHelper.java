@@ -22,13 +22,13 @@ import java.time.LocalDateTime;
 
 @Component
 @Slf4j
-public class JsonHelper {
+public final class JsonHelper {
 
     private final ObjectMapper objectMapper;
 
     private static JsonHelper instance;
 
-    public JsonHelper() {
+    private JsonHelper() {
         SimpleModule localDateTimeSerialization = new SimpleModule();
         localDateTimeSerialization.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer());
         localDateTimeSerialization.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer());

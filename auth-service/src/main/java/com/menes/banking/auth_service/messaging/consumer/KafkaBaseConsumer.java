@@ -14,6 +14,7 @@ public abstract class KafkaBaseConsumer implements Consumer<Message<String>> {
     private static final long NACK_TIMEOUT = 1000;
 
     // apply template pattern
+    @Override
     public final void accept(Message<String> message) {
         try {
             String payload = message.getPayload();
