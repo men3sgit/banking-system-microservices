@@ -54,8 +54,8 @@ public class Profile {
     private LocalDateTime dateOfBirth;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "kyc_status", nullable = false)
-    private KycStatus kycStatus;
+    @Column(name = "profile_status", nullable = false)
+    private ProfileStatus profileStatus;
 
     @Column(name = "identity_profile_status")
     private String identityProfileStatus;
@@ -80,7 +80,7 @@ public class Profile {
         this.updatedDate = LocalDateTime.now();
     }
 
-    public enum KycStatus {
-        PENDING_KYC, APPROVED, REJECTED
+    public enum ProfileStatus {
+        ACTIVE, PENDING_APPROVAL, BLOCKED, CLOSED, DORMANT, INACTIVE, REJECTED
     }
 }

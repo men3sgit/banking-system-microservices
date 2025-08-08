@@ -1,10 +1,8 @@
-package com.menes.banking.auth_service.dto;
+package com.menes.banking.auth_service.controller.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 
 @Getter
 @NoArgsConstructor

@@ -1,14 +1,12 @@
 package com.menes.banking.auth_service.controller;
 
-import com.menes.banking.auth_service.dto.*;
+import com.menes.banking.auth_service.controller.model.*;
 import com.menes.banking.auth_service.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor

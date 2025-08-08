@@ -1,7 +1,6 @@
 package com.menes.banking.auth_service.messaging.producer;
 
-import com.menes.banking.auth_service.messaging.model.EventType;
-import com.menes.banking.auth_service.messaging.model.OtpNotificationEvent;
+import com.menes.banking.auth_service.messaging.model.Event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -20,19 +19,13 @@ public class KafkaProfileProducer {
     /**
      * Publish OTP notification event
      */
-    public void publishOtpNotification(OtpNotificationEvent otpEvent) {
-        sendMessage(OTP_NOTIFICATION_TOPIC, otpEvent, EventType.OTP_NOTIFICATION);
-    }
-
-    /**
-     * Generic send logic
-     */
-    private void sendMessage(String topic, Object payload, EventType eventType) {
+    public void publishEvent(Event<?> event, String topic) {
         try {
-            kafkaTemplate.send(topic, payload);
-            log.info("✅ Published {} to topic={} with payload={}", eventType, topic, payload);
+            kafkaTemplate.send(topic, event);
+            log.info("✅ Published {} to topic={} with payload={}", event.getEventType(), topic, event);
         } catch (Exception ex) {
-            log.error("❌ Failed to publish {}: {}", eventType, ex.getMessage(), ex);
+            log.error("❌ Failed to publish {}: {}", event.getEventType(), ex.getMessage(), ex);
         }
     }
+
 }
