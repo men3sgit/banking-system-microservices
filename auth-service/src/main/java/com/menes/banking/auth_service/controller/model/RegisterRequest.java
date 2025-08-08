@@ -21,4 +21,11 @@ public class RegisterRequest {
             message = "Phone number should be valid (e.g., +84901234567 or 0901234567)"
     )
     private String phoneNumber;
+
+    @NotBlank
+    private String firstName;
+
+    @NotBlank
+    private String lastName;
+
 }

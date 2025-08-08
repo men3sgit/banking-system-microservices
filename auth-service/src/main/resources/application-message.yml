@@ -1,3 +1,9 @@
 spring:
   kafka:
     bootstrap-servers: localhost:9092
+
+messaging:
+  destination:
+    profile-topic-name: profile-events-topic
+    notification-topic-name: notification-events-topic
+    account-topic-name: account-event-topic

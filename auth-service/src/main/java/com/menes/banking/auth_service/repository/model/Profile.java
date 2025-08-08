@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "profles")
+@Table(name = "profiles")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class Profile {
+public class Profile extends EntityAuditor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -19,15 +19,17 @@ public class Profile {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String username;
+    private String firstName;
+
+    private String lastName;
 
     private String phoneNumber;
 
     @Column(nullable = false)
     private boolean isVerified = false;
 
-    @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL)
-    private KycInfo kycInfo;
+    private String type;
+
+    private String status;
 
 }

@@ -6,11 +6,13 @@ import lombok.Getter;
 public enum DomainCode {
 
     // Common Code
-    GENERIC_ERROR("0000", "Internal Server Error"),
-    MISSING_REQUIRED_FIELD("0001", "Missing require field"),
+    GENERIC_ERROR("000", "Internal Server Error"),
+    MISSING_REQUIRED_FIELD("001", "Missing require field"),
+    EMAIL_EXISTS("009", "Email already exists"),
     PROFILE_NOT_FOUND("0007", "Profile not found");
 
-    public static final String SERVICE_IDENTIFIER = "0601";
+
+    public static final String SERVICE_IDENTIFIER = "M_M";
 
     private String externalCode;
 
