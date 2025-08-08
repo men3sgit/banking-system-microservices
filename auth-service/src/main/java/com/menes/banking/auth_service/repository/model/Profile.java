@@ -22,6 +22,8 @@ public class Profile {
     @Column(nullable = false)
     private String username;
 
+    private String phoneNumber;
+
     @Column(nullable = false)
     private boolean isVerified = false;
 

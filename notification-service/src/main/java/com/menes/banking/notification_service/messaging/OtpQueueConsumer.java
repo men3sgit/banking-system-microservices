@@ -33,9 +33,9 @@ public class OtpQueueConsumer extends EventConsumer<OtpEvent> {
     @KafkaListener(topics = "otp-events", groupId = "otp-consumer-group")
     public void consume(String message) {
         System.out.println("📥 [Kafka] Received raw message: " + message);
-//
-//        Event<OtpEvent> event = parseMessage(message);
-//        System.out.println("✅ [Kafka] Parsed Event: " + event);
+
+        Event<OtpEvent> event = parseMessage(message);
+        System.out.println("✅ [Kafka] Parsed Event: " + event);
 
 //        if (!isEventExpected(event)) {
 //            System.err.println("❌ [Kafka] Invalid OTP Event: " + getUnExpectedEventReason());

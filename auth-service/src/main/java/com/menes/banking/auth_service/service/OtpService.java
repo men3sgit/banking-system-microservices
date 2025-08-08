@@ -1,19 +1,12 @@
 package com.menes.banking.auth_service.service;
 
 
-public interface OtpService {
-    /**
-     * Tạo OTP cho user
-     * @param userId ID của user
-     * @return OTP vừa được tạo
-     */
-    String generateOtp(String userId);
+import java.util.Map;
 
-    /**
-     * Xác thực OTP của user
-     * @param userId ID của user
-     * @param otp OTP cần xác thực
-     * @return true nếu hợp lệ, false nếu không
-     */
-    boolean validateOtp(String userId, String otp);
+public interface OtpService {
+
+    String generateOtp(String profileId, String type, Map<String,Object> attrs);
+
+    boolean validateOtp(String profileId, String type, String otp);
+
 }

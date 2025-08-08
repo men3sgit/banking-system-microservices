@@ -1,6 +1,6 @@
 package com.menes.banking.auth_service.service;
 
-import com.menes.banking.auth_service.dto.*;
+import com.menes.banking.auth_service.controller.model.*;
 
 
 public interface AuthService {

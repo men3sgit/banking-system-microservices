@@ -1,4 +1,4 @@
-package com.menes.banking.auth_service.dto;
+package com.menes.banking.auth_service.controller.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

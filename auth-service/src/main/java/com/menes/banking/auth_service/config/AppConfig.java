@@ -1,23 +1,23 @@
 package com.menes.banking.auth_service.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.menes.banking.auth_service.config.serialize.LocalDateTimeSerializer;
+import com.menes.banking.auth_service.config.properties.LoginOtpProperties;
+import com.menes.banking.auth_service.service.OtpPolicy;
+import com.menes.banking.auth_service.service.model.DeliveryChannel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
+import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Configuration
 @Slf4j
+@EnableConfigurationProperties(LoginOtpProperties.class)
 public class AppConfig {
 
     @Bean
@@ -29,6 +29,32 @@ public class AppConfig {
     public ExecutorService executorService() {
         log.info("Starting new fixed thread pool");
         return Executors.newFixedThreadPool(2);
+    }
+
+    @Bean("registerOtpPolicy")
+    public OtpPolicy registerOtpPolicy() {
+        log.info("Starting new Registering OTP Policy");
+        return new OtpPolicy() {
+            public int length() {
+                return 6;
+            }
+
+            public Duration ttl() {
+                return Duration.ofMinutes(3);
+            }
+
+            public int maxAttempts() {
+                return 5;
+            }
+
+            public boolean allowReuse() {
+                return false;
+            }
+
+            public List<DeliveryChannel> channels() {
+                return List.of(DeliveryChannel.SMS);
+            }
+        };
     }
 
 

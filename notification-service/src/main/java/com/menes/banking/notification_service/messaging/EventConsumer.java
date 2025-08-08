@@ -12,9 +12,9 @@ public abstract class EventConsumer<D> {
         return JsonHelper.getInstance().readValue(message, this.getEventType());
     }
 
-    protected abstract String getUnExpectedEventReason();
-
     protected abstract JavaType getEventType();
+
+    protected abstract String getUnExpectedEventReason();
 
     protected abstract boolean isEventExpected(Event<D> event);
 
