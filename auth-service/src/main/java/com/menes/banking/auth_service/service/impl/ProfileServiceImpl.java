@@ -28,8 +28,8 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void createProfile(Profile profile) {
-        profileRepository.save(profile);
+    public Profile createProfile(Profile profile) {
+        return profileRepository.save(profile);
     }
 
     @Override

@@ -6,20 +6,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OtpNotificationEvent {
+public class OtpEvent {
 
-    private String phoneNumber;
+    private String optId;
 
-    private String otp;
+    private String code;
 
-    private List<String> channels;
+    private String destination;
 
-    private LocalDateTime expiryTime;
+    private String channel;
 
+    private LocalDateTime expiresAt;
 }

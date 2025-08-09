@@ -9,16 +9,10 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class KafkaProfileProducer {
-
-    private static final String OTP_NOTIFICATION_TOPIC = "otp-events";
+public class KafkaProducer {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-
-    /**
-     * Publish OTP notification event
-     */
     public void publishEvent(Event<?> event, String topic) {
         try {
             kafkaTemplate.send(topic, event);

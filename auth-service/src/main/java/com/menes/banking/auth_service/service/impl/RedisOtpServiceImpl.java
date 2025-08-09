@@ -19,13 +19,14 @@ public class RedisOtpServiceImpl implements OtpService {
 
     private final RedisTemplate<String, String> redisTemplate;
 
+
     @Override
-    public String generateOtp(String profileId, String type, Map<String, Object> attrs) {
+    public String generateOtp(String subject) {
         return "";
     }
 
     @Override
-    public boolean validateOtp(String profileId, String type, String otp) {
+    public boolean validate(String subject, String otp) {
         return false;
     }
 }

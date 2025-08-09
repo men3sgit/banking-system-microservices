@@ -8,7 +8,7 @@ public interface ProfileService {
 
     boolean existsEmail(String email);
 
-    void createProfile(Profile profile);
+    Profile createProfile(Profile profile);
 
     void processProfileEvent(Event<ProfileEvent> event);
 

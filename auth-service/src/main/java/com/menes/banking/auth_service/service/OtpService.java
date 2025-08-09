@@ -1,12 +1,10 @@
 package com.menes.banking.auth_service.service;
 
-
-import java.util.Map;
+import com.menes.banking.auth_service.service.model.OtpResult;
 
 public interface OtpService {
 
-    String generateOtp(String profileId, String type, Map<String,Object> attrs);
+    OtpResult generateOtp(String subject);
 
-    boolean validateOtp(String profileId, String type, String otp);
-
+    boolean validate(String subject, String otp);
 }
