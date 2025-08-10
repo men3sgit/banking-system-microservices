@@ -60,4 +60,9 @@ public class Event<D> {
     public enum AckQueueType {
         KAFKA, RABBITMQ, SQS
     }
+
+    public enum MessageType {
+        MESSAGE_OUT, MESSAGE_IN;
+    }
+
 }

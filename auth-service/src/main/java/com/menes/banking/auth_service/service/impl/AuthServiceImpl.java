@@ -1,45 +1,60 @@
 package com.menes.banking.auth_service.service.impl;
 
-import com.menes.banking.auth_service.connector.ProfileClient;
+import com.menes.banking.auth_service.config.properties.InternalTopicProperties;
 import com.menes.banking.auth_service.controller.model.*;
+import com.menes.banking.auth_service.exception.DomainCode;
+import com.menes.banking.auth_service.exception.DomainException;
 import com.menes.banking.auth_service.messaging.model.Event;
+import com.menes.banking.auth_service.messaging.model.Event.MessageType;
 import com.menes.banking.auth_service.messaging.model.EventType;
-import com.menes.banking.auth_service.messaging.model.OtpNotificationEvent;
-import com.menes.banking.auth_service.messaging.producer.KafkaProfileProducer;
+import com.menes.banking.auth_service.messaging.model.OtpEvent;
+import com.menes.banking.auth_service.messaging.model.ProfileEvent;
+import com.menes.banking.auth_service.messaging.producer.KafkaProducer;
 import com.menes.banking.auth_service.repository.model.Profile;
-import com.menes.banking.auth_service.repository.ProfileRepository;
 import com.menes.banking.auth_service.service.AuthService;
 import com.menes.banking.auth_service.service.OtpService;
-import com.menes.banking.auth_service.service.model.DeliveryChannel;
+import com.menes.banking.auth_service.service.ProfileService;
+import com.menes.banking.auth_service.service.model.OtpResult;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ExecutorService;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AuthServiceImpl implements AuthService {
-    private final ProfileRepository profileRepository;
-    private final ProfileClient profileClient;
-    private final KafkaProfileProducer kafkaProfileProducer;
+    private final ProfileService profileService;
+    //    private final ProfileClient profileClient; decoupling use EDA
+    private final KafkaProducer kafkaProfileProducer;
+    private final InternalTopicProperties internalTopicProperties;
     private final OtpService otpService;
-    private final ExecutorService executorService;
 
     @Transactional
     @Override
     public RegisterResponse register(RegisterRequest request) {
+        final String email = request.getEmail().trim().toLowerCase(Locale.ROOT);
 
+        if (profileService.existsEmail(email)) {
+            throw new DomainException(DomainCode.EMAIL_EXISTS);
+        }
 
+        Profile newProfile = Profile.builder()
+                .email(email)
+                .phoneNumber(request.getPhoneNumber())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .build();
 
-        return null;
+        Profile saved = profileService.createProfile(newProfile);
+
+        publishProfileCreatedEvent(saved);
+
+        publishOtpEvent(saved);
+
+        return new RegisterResponse("Create new profile successfully");
     }
 
 
@@ -61,7 +76,37 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void callProfileClient(String request) {
         log.info("Call profile client from auth service with request {}", request);
-        profileClient.verifyProfileExistsByEmail(request);
+//        profileClient.verifyProfileExistsByEmail(request);
         log.info("Profile verified successfully");
     }
+
+    private void publishProfileCreatedEvent(Profile profile) {
+        ProfileEvent profileEvent = ProfileEvent.copyFrom(profile);
+        Event<ProfileEvent> event = Event.<ProfileEvent>builder()
+                .data(profileEvent)
+                .messageType(Event.MessageType.MESSAGE_OUT)
+                .eventType(EventType.PROFILE_CREATED)
+                .ackQueueType(Event.AckQueueType.KAFKA)
+                .build();
+        kafkaProfileProducer.publishEvent(event, internalTopicProperties.getProfileTopicName());
+    }
+
+    private void publishOtpEvent(Profile profile) {
+        OtpResult otpResult = otpService.generateOtp();
+
+        OtpEvent otpEvent = OtpEvent.builder()
+                .channel("SMS")
+                .code(otpResult.getCode())
+                .destination(profile.getPhoneNumber())
+                .build();
+
+        Event<OtpEvent> event = Event.<OtpEvent>builder()
+                .data(otpEvent)
+                .messageType(MessageType.MESSAGE_OUT)
+                .eventType(EventType.PROFILE_CREATED) // hoặc OTP_CREATED nếu sau này tách riêng
+                .ackQueueType(Event.AckQueueType.KAFKA)
+                .build();
+        kafkaProfileProducer.publishEvent(event, internalTopicProperties.getNotificationTopicName());
+    }
+
 }

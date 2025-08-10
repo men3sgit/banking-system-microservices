@@ -1,5 +1,6 @@
 package com.menes.banking.auth_service.messaging.model;
 
+import com.menes.banking.auth_service.repository.model.Profile;
 import com.menes.banking.auth_service.validator.RegexConstant;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -35,5 +36,17 @@ public class ProfileEvent {
 
     @NotNull
     private String status;
+
+    public static ProfileEvent copyFrom(Profile profile) {
+        return ProfileEvent.builder()
+                .profileId(profile.getId())
+                .type(profile.getType())
+                .phoneNumber(profile.getPhoneNumber())
+                .email(profile.getEmail())
+                .firstName(profile.getFirstName())
+                .lastName(profile.getLastName())
+                .status(profile.getStatus())
+                .build();
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.menes.banking.auth_service.repository.model;
+package com.menes.banking.profile_service.repository.model;
 
 import jakarta.persistence.*;
 import lombok.*;
