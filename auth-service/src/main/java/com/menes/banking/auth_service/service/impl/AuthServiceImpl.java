@@ -92,7 +92,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void publishOtpEvent(Profile profile) {
-        OtpResult otpResult = otpService.generateOtp(profile.getId());
+        OtpResult otpResult = otpService.generateOtp();
 
         OtpEvent otpEvent = OtpEvent.builder()
                 .channel("SMS")

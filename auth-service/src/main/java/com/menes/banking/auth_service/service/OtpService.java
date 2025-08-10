@@ -1,10 +1,13 @@
 package com.menes.banking.auth_service.service;
 
+import com.menes.banking.auth_service.controller.model.OtpRequest;
 import com.menes.banking.auth_service.service.model.OtpResult;
 
 public interface OtpService {
 
-    OtpResult generateOtp(String subject);
+    OtpResult generateOtp();
 
-    boolean validate(String subject, String otp);
+    boolean validate(OtpRequest request);
+
+    OtpResult resend(String otpId);
 }

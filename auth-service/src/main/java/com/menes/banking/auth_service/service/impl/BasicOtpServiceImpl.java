@@ -1,5 +1,6 @@
 package com.menes.banking.auth_service.service.impl;
 
+import com.menes.banking.auth_service.controller.model.OtpRequest;
 import com.menes.banking.auth_service.service.OtpService;
 import com.menes.banking.auth_service.service.model.OtpResult;
 import lombok.Getter;
@@ -20,19 +21,19 @@ public class BasicOtpServiceImpl implements OtpService {
     private static final int OTP_LENGTH = 6;
     private static final int TTL_SECONDS = 300;       // 5 phút
     private static final int MAX_ATTEMPTS = 5;
+    private static final int MAX_RESENDS = 3;       // policy: gửi lại tối đa 3 lần
 
-    private final SecureRandom random = new SecureRandom();
+    private static final SecureRandom random = new SecureRandom();
 
-    // subject -> entry
     private final Map<String, Entry> store = new ConcurrentHashMap<>();
 
     @Override
-    public OtpResult generateOtp(String subject) {
+    public OtpResult generateOtp() {
         String code = generateCode(OTP_LENGTH);
         String otpId = UUID.randomUUID().toString();
         Instant exp = Instant.now().plusSeconds(TTL_SECONDS);
 
-        store.put(subject, new Entry(otpId, code, exp, 0)); // enhance later because override otp with the same subject
+        store.put(otpId, new Entry(otpId, code, exp, 0, 0)); // enhance later because override otp with the same subject
 
         return OtpResult.builder()
                 .otpId(otpId)
@@ -41,31 +42,62 @@ public class BasicOtpServiceImpl implements OtpService {
                 .build();
     }
 
+    @Override
+    public boolean validate(OtpRequest request) {
+        final String otpId = request.getOtpId(); // <-- sửa tên getter
+        final String input = request.getOtpCode();
 
-    public boolean validate(String subject, String code) {
-        Entry e = store.get(subject);
-        if (e == null) return false;
-        if (Instant.now().isAfter(e.expiresAt)) {
-            store.remove(subject);
-            return false;
+        return store.compute(otpId, (id, e) -> {
+            if (e == null) return null; // không tồn tại
+
+            Instant now = Instant.now();
+            if (now.isAfter(e.expiresAt) || e.attempts >= MAX_ATTEMPTS) {
+                return null; // xoá luôn nếu hết hạn hoặc vượt quá số lần thử
+            }
+
+            e.attempts++; // tăng đếm trong vùng atomic
+            boolean ok = e.code.equals(input);
+            return ok ? null : e; // đúng thì remove (return null), sai thì giữ lại với attempts đã +1
+        }) == null && !store.containsKey(otpId);
+    }
+
+    @Override
+    public OtpResult resend(String otpId) {
+        Entry e = store.compute(otpId, (id, cur) -> {
+            if (cur == null) return null;
+            Instant now = Instant.now();
+            if (now.isAfter(cur.expiresAt)) return null;
+            if (cur.resends >= MAX_RESENDS) return cur; // giữ nguyên nếu quá giới hạn
+
+            // rotate code + reset attempts + extend TTL
+            cur.rotateCode();
+            cur.resends++;
+            return cur;
+        });
+
+        if (e == null) {
+            throw new IllegalStateException("OTP not found or expired");
         }
-        if (e.attempts >= MAX_ATTEMPTS) {
-            store.remove(subject);
-            return false;
+        if (e.resends > MAX_RESENDS) { // phòng ngừa, thực tế không vào nhánh này
+            throw new IllegalStateException("Resend limit exceeded");
         }
-        e.attempts++;
-        boolean ok = e.code.equals(code);
-        if (ok) store.remove(subject);
-        return ok;
+        // Trả về code chỉ dùng DEV. Prod: gửi code qua kênh SMS/Email, không trả trong API.
+        return OtpResult.builder()
+                .otpId(e.otpId)
+                .code(e.code)
+                .expiresAt(e.expiresAt)
+                .build();
     }
 
 
-    private String generateCode(int len) {
-        int bound = (int) Math.pow(10, len);
-        int min = bound / 10;
-        int n = random.nextInt(bound - min) + min; // đảm bảo đủ len chữ số, không bắt đầu bằng 0
-        return String.valueOf(n);
+    private static String generateCode(int len) {
+        int min = (int) Math.pow(10, len - 1); // 10^(len-1)
+        int range = 9 * min;                   // từ min đến 10^len - 1
+        int n = random.nextInt(range) + min;
+        return Integer.toString(n);
     }
+
+
 
     // Dọn rác định kỳ (tuỳ chọn)
     @Scheduled(fixedDelay = 60_000)
@@ -76,15 +108,25 @@ public class BasicOtpServiceImpl implements OtpService {
 
     @Getter
     private static final class Entry {
-        final String code;
-        final Instant expiresAt;
+        String code;
+        Instant expiresAt;
         int attempts;
         final String otpId;
-        Entry(String otpId, String code, Instant expiresAt, int attempts) {
+        int resends;    // số lần gửi lại
+
+        Entry(String otpId, String code, Instant expiresAt, int attempts, int resends) {
             this.otpId = otpId;
             this.code = code;
             this.expiresAt = expiresAt;
             this.attempts = attempts;
+            this.resends = resends;
+        }
+
+        public void rotateCode() {
+            this.code = generateCode(OTP_LENGTH);
+            this.attempts = 0;
+            this.expiresAt = Instant.now().plusSeconds(TTL_SECONDS);
+
         }
     }
 }
