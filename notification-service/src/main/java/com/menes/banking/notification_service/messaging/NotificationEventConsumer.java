@@ -15,7 +15,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class OtpQueueConsumer extends EventConsumer<OtpEvent> {
+public class NotificationEventConsumer extends EventConsumer<OtpEvent> {
 
     private static final List<EventType> SUPPORTED_OTP_EVENT_TYPES =
             List.of(
@@ -30,7 +30,7 @@ public class OtpQueueConsumer extends EventConsumer<OtpEvent> {
     private final NotificationService notificationService;
 
 
-    @KafkaListener(topics = "otp-events", groupId = "otp-consumer-group")
+    @KafkaListener(topics = "notification-events-topic", groupId = "notification-consumer-group")
     public void consume(String message) {
         System.out.println("📥 [Kafka] Received raw message: " + message);
 
@@ -45,7 +45,7 @@ public class OtpQueueConsumer extends EventConsumer<OtpEvent> {
 //        System.out.printf("🔎 [Kafka] Processing OTP Event Type: %s for User: %s%n",
 //                event.getEventType(), event.getData().getProfileId());
 //
-//        handleEvent(event);
+        handleEvent(event);
 
         System.out.println("🎉 [Kafka] Successfully handled OTP event for user: ");
 //                + event.getData().getProfileId());
@@ -55,7 +55,7 @@ public class OtpQueueConsumer extends EventConsumer<OtpEvent> {
     @Override
     protected JavaType getEventType() {
         return TypeFactory.defaultInstance()
-                .constructParametricType(Event.class, OtpEvent.class);
+                .constructParametricType(Event.class, NotificationEvent.class);
     }
 
     @Override
@@ -66,11 +66,13 @@ public class OtpQueueConsumer extends EventConsumer<OtpEvent> {
 
     @Override
     protected Object handleEvent(Event<OtpEvent> event) {
+        if (!isEventExpected(event)) {
+            return getUnExpectedEventReason();
+        }
         var data = event.getData();
 
-        data.getChannels().forEach(channel ->
-                notificationService.sendOtp(data.getProfileId(), data.getOtpCode(), channel)
-        );
+
+
 
         return null;
     }

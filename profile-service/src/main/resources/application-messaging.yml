@@ -1,0 +1,36 @@
+spring:
+  cloud:
+    function:
+      definition: profile-events-channel,transaction-events-channel  # nhiều consumer độc lập
+    stream:
+      bindings:
+        profile-events-channel-in-0:
+          destination: profile-event-topic
+          group: profile-event-group
+          contentType: application/json
+#        transaction-events-channel-in-0:
+#          destination: transaction-event-topic
+#          group: transaction-event-group
+#          contentType: application/json
+      kafka:
+        bindings:
+          profile-events-channel-in-0:
+            consumer:
+              ackMode: MANUAL
+#          transaction-events-channel-in-0:
+#            consumer:
+#              ackMode: MANUAL
+
+
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        acknowledge-mode: AUTO
+        prefetch: 20
+        concurrency: 2
+        max-concurrency: 10
