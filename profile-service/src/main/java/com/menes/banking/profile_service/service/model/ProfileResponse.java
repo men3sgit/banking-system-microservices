@@ -50,7 +50,6 @@ public class ProfileResponse {
                 .cellphone(profile.getCellphone())
                 .occupation(profile.getOccupation())
                 .dateOfBirth(profile.getDateOfBirth())
-                .kycStatus(profile.getKycStatus().name())
                 .identityProfileStatus(profile.getIdentityProfileStatus())
                 .onBoardingChannel(profile.getOnBoardingChannel())
                 .createdDate(profile.getCreatedDate())

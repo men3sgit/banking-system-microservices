@@ -1,5 +1,6 @@
 package com.menes.banking.profile_service.repository.model;
 
+import com.menes.banking.profile_service.messaging.model.ProfileEvent;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -82,5 +83,12 @@ public class Profile {
 
     public enum ProfileStatus {
         ACTIVE, PENDING_APPROVAL, BLOCKED, CLOSED, DORMANT, INACTIVE, REJECTED
+    }
+
+    public static Profile from(ProfileEvent profileEvent) {
+        return Profile.builder()
+                .email(profileEvent.getEmail())
+                .cellphone(profileEvent.getPhoneNumber())
+                .build();
     }
 }
