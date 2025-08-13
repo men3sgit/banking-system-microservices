@@ -2,20 +2,18 @@ package com.menes.banking.profile_service.repository.model;
 
 import com.menes.banking.profile_service.messaging.model.ProfileEvent;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "profiles")
-@Data
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Profile {
+public class Profile extends EntityAuditor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID) // Auto-generate UUID
@@ -64,25 +62,8 @@ public class Profile {
     @Column(name = "onboarding_channel")
     private String onBoardingChannel;
 
-    @Column(name = "created_date", updatable = false)
-    private LocalDateTime createdDate;
-
-    @Column(name = "updated_date")
-    private LocalDateTime updatedDate;
-
-    @PrePersist
-    public void prePersist() {
-        this.createdDate = LocalDateTime.now();
-        this.updatedDate = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        this.updatedDate = LocalDateTime.now();
-    }
-
     public enum ProfileStatus {
-        ACTIVE, PENDING_APPROVAL, BLOCKED, CLOSED, DORMANT, INACTIVE, REJECTED
+        ACTIVE, PENDING_APPROVAL, BLOCKED, CLOSED, INACTIVE, REJECTED
     }
 
     public static Profile from(ProfileEvent profileEvent) {
