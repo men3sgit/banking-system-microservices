@@ -28,7 +28,7 @@ import java.util.Locale;
 public class AuthServiceImpl implements AuthService {
     private final ProfileService profileService;
     //    private final ProfileClient profileClient; decoupling use EDA
-    private final KafkaProducer kafkaProfileProducer;
+    private final KafkaProducer kafkaProducer;
     private final InternalTopicProperties internalTopicProperties;
     private final OtpService otpService;
 
@@ -54,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
 
         publishOtpEvent(saved);
 
-        return new RegisterResponse("Create new profile successfully");
+        return new RegisterResponse("Create new profile successfully", saved);
     }
 
 
@@ -81,14 +81,16 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void publishProfileCreatedEvent(Profile profile) {
-        ProfileEvent profileEvent = ProfileEvent.copyFrom(profile);
+        ProfileEvent profileEventData = ProfileEvent.copyFrom(profile);
+
         Event<ProfileEvent> event = Event.<ProfileEvent>builder()
-                .data(profileEvent)
+                .data(profileEventData)
                 .messageType(Event.MessageType.MESSAGE_OUT)
                 .eventType(EventType.PROFILE_CREATED)
                 .ackQueueType(Event.AckQueueType.KAFKA)
                 .build();
-        kafkaProfileProducer.publishEvent(event, internalTopicProperties.getProfileTopicName());
+
+        kafkaProducer.publishEvent(event, internalTopicProperties.getProfileTopicName());
     }
 
     private void publishOtpEvent(Profile profile) {
@@ -106,7 +108,8 @@ public class AuthServiceImpl implements AuthService {
                 .eventType(EventType.PROFILE_CREATED) // hoặc OTP_CREATED nếu sau này tách riêng
                 .ackQueueType(Event.AckQueueType.KAFKA)
                 .build();
-        kafkaProfileProducer.publishEvent(event, internalTopicProperties.getNotificationTopicName());
+
+        kafkaProducer.publishEvent(event, internalTopicProperties.getNotificationTopicName());
     }
 
 }

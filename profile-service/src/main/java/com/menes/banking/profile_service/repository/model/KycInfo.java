@@ -12,15 +12,21 @@ import lombok.*;
 public class KycInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     private String fullName;
+
     private String nationalId;
+
     private String address;
+
     private String phoneNumber;
+
     private String dateOfBirth;
+
     private String gender;
+
     private String nationality;
 
     @Enumerated(EnumType.STRING)

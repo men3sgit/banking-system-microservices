@@ -29,6 +29,8 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Profile createProfile(Profile profile) {
+        log.info("Creating profile {}", profile);
+        profile.setStatus("WAITING_FOR_APPROVAL");
         return profileRepository.save(profile);
     }
 

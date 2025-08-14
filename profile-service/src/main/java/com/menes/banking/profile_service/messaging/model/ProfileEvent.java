@@ -1,5 +1,6 @@
 package com.menes.banking.profile_service.messaging.model;
 
+import com.menes.banking.profile_service.validator.RegexConstant;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

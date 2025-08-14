@@ -1,7 +1,9 @@
 package com.menes.banking.profile_service.repository.model;
 
 public enum KycStatus {
-    PENDING,
-    VERIFIED,
+    WAIT_FOR_APPROVAL,
+
+    APPROVED,
+
     REJECTED
 }

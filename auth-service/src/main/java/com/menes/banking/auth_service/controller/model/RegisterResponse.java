@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @Getter
 public class RegisterResponse {
     private String message;
+    private Object data;
 }
