@@ -68,6 +68,7 @@ public class Profile extends EntityAuditor {
 
     public static Profile from(ProfileEvent profileEvent) {
         return Profile.builder()
+                .id(profileEvent.getProfileId())
                 .email(profileEvent.getEmail())
                 .cellphone(profileEvent.getPhoneNumber())
                 .build();
