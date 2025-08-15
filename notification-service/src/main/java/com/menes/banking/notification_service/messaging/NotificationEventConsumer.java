@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.menes.banking.notification_service.messaging.model.Event;
 import com.menes.banking.notification_service.messaging.model.Event.EventType;
 
+import com.menes.banking.notification_service.messaging.model.NotificationEvent;
 import com.menes.banking.notification_service.messaging.model.OtpEvent;
 import com.menes.banking.notification_service.service.NotificationService;
 import lombok.RequiredArgsConstructor;

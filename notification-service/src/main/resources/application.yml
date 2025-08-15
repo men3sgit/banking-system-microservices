@@ -1,3 +1,16 @@
 spring:
   kafka:
     bootstrap-servers: localhost:9092
+
+  config:
+    import: optional:file:.env
+
+
+twilio:
+  accountSid: ${TWILIO_ACCOUNT_SID:123}
+  apiKeySid: ${TWILIO_API_KEY_SID:123}
+  apiKeySecret: ${TWILIO_API_KEY_SECRET:123}
+  authToken: ${TWILIO_AUTH_TOKEN:authauthauth}
+  messagingServiceSid: ${TWILIO_MESSAGING_SERVICE_SID:456}
+  fromNumber: ${TWILIO_FROM_NUMBER:999}
+  verifyServiceSid: ${TWILIO_VERIFY_SERVICE_SID:000}

@@ -28,7 +28,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public ProfileResponse getProfile(String userId) {
+    public ProfileResponse getProfile(String profileId) {
         return null;
     }
 
