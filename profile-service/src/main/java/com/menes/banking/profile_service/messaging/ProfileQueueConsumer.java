@@ -6,12 +6,14 @@ import com.menes.banking.profile_service.messaging.model.Event.EventType;
 import com.menes.banking.profile_service.messaging.model.ProfileEvent;
 import com.menes.banking.profile_service.service.ProfileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ProfileQueueConsumer extends EventConsumer<ProfileEvent> {
 
     private static final List<EventType> SUPPORTED_PROFILE_EVENT_TYPES = List.of(Event.EventType.PROFILE_CREATED, EventType.PROFILE_UPDATED);
@@ -35,8 +37,12 @@ public class ProfileQueueConsumer extends EventConsumer<ProfileEvent> {
 
     @Override
     protected Object handleEvent(Event<ProfileEvent> event) {
-        ProfileEvent profileEvent = event.getData();
-        profileService.createProfile(profileEvent);
+        if(!isEventExpected(event)) {
+            log.warn("Ignored - message type {} is not supported", event.getEventType());
+            return null;
+        }
+
+
         return null;
     }
 }
