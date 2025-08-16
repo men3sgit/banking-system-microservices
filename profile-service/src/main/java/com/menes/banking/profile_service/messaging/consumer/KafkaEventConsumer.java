@@ -1,4 +1,4 @@
-package com.menes.banking.profile_service.messaging;
+package com.menes.banking.profile_service.messaging.consumer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

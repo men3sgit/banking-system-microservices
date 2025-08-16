@@ -1,4 +1,4 @@
-package com.menes.banking.profile_service.messaging;
+package com.menes.banking.profile_service.messaging.producer;
 
 public interface MessageProducer {
 

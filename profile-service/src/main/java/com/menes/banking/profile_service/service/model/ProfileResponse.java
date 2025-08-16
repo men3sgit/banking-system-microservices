@@ -53,7 +53,7 @@ public class ProfileResponse {
                 .identityProfileStatus(profile.getIdentityProfileStatus())
                 .onBoardingChannel(profile.getOnBoardingChannel())
                 .createdDate(profile.getCreatedDate())
-                .updatedDate(profile.getUpdatedDate())
+                .updatedDate(profile.getModifiedDate())
 //                .addresses(addresses != null
 //                        ? addresses.stream().map(AddressResponse::fromEntity).collect(Collectors.toList())
 //                        : null)

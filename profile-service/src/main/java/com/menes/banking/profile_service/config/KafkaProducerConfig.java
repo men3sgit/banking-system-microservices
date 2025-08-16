@@ -23,8 +23,7 @@ import java.util.Map;
 @Configuration
 public class KafkaProducerConfig {
 
-    @Value("${spring.kafka.bootstrap-servers}")
-    private String bootstrapServers;
+
 
     @Bean
     public KafkaTemplate<String, Object> kafkaTemplate() {
@@ -34,8 +33,6 @@ public class KafkaProducerConfig {
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-
         // Không cần set VALUE_SERIALIZER_CLASS_CONFIG nếu truyền trực tiếp serializer
 
         JsonSerializer<Object> valueSerializer = new JsonSerializer<>(kafkaObjectMapper());

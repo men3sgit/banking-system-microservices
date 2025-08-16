@@ -28,7 +28,7 @@ public class TwilioSenderImpl implements SmsSender {
     @Override
     public void sendSms(String phoneNumber, String otpCode) {
         String to = toE164(phoneNumber);                     // normalize to E.164
-        String body = "Di don vo may kia Men oi!!!!";          // adjust copy as needed
+        String body = "Hay ngoi day va hoc bai di ban nhe";          // adjust copy as needed
 
         if (!hasText(props.getMessagingServiceSid()) && !hasText(props.getFromNumber())) {
             throw new IllegalStateException("Configure either twilio.messagingServiceSid or twilio.fromNumber");

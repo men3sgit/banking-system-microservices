@@ -1,4 +1,5 @@
 spring:
+  profiles.include: "message"
   kafka:
     bootstrap-servers: localhost:9092
   datasource:
