@@ -1,11 +1,12 @@
-package com.menes.banking.profile_service.messaging;
+package com.menes.banking.profile_service.messaging.consumer;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.menes.banking.profile_service.messaging.model.Event;
 import com.menes.banking.profile_service.service.EventService;
 import com.menes.banking.profile_service.utils.JsonHelper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
+@AllArgsConstructor
 @Slf4j
 public abstract class EventConsumer<D> {
     private static final String PROCESS_NAME = "EVENT_CONSUMER";
@@ -13,6 +14,7 @@ public abstract class EventConsumer<D> {
     private final EventService eventService;
 
     protected Event<D> parseMessage(String message) {
+        log.info(PROCESS_NAME + ".parseMessage: {}", message);
         return JsonHelper.getInstance().readValue(message, this.getEventType());
     }
 
@@ -25,7 +27,6 @@ public abstract class EventConsumer<D> {
 
             this.handleEvent(event);
             log.info("[{}][{}] Successfully processed event", PROCESS_NAME, traceId);
-            even
         } catch (Exception e) {
             log.error("[{}][{}] Failed to process event: {}", PROCESS_NAME, traceId, e.getMessage(), e);
         }

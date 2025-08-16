@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     @Override
     public RegisterResponse register(RegisterRequest request) {
-        final String email = request.getEmail().trim().toLowerCase(Locale.ROOT);
+        final String email = request.getEmail().trim().toLowerCase();
 
         if (profileService.existsEmail(email)) {
             throw new DomainException(DomainCode.EMAIL_EXISTS);
