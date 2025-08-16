@@ -22,7 +22,7 @@ It's a clean, production-ready template for building scalable microservices with
 | Layer                 | Technologies |
 |----------------------|--------------|
 | Framework             | Spring Boot, Spring Cloud |
-| Messaging             | Apache Kafka |
+| Messaging             | Apache Kafka | RabbitMQ
 | Configuration         | application.yml + Spring Config |
 | Data Storage          | PostgreSQL (or others) |
 | Persistence (OTP)     | Redis |
