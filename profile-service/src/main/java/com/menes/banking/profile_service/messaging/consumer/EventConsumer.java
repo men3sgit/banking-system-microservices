@@ -34,8 +34,6 @@ public abstract class EventConsumer<D> {
 
     protected abstract JavaType getEventType();
 
-    protected abstract String getUnExpectedEventReason();
-
     protected abstract boolean isEventExpected(Event<D> event);
 
     protected abstract Object handleEvent(Event<D> event);
