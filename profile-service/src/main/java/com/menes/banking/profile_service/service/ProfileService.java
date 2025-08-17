@@ -10,6 +10,8 @@ public interface ProfileService {
 
     void createProfile(ProfileEvent profileEvent);
 
+    void updateProfile(ProfileEvent data);
+
     void submitKyc(String profileId, KycRequest request);
 
     ProfileResponse getProfile(String userId);
@@ -19,5 +21,4 @@ public interface ProfileService {
     void approveKyc(String profileId);
 
     void rejectKyc(String profileId, String reason);
-
 }
