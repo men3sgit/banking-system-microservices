@@ -1,0 +1,20 @@
+package com.menes.banking.profile_service.exception;
+
+import lombok.Getter;
+
+@Getter
+public class DomainException extends RuntimeException {
+
+    private final String errorCode;
+
+    private final String errorMessage;
+
+    private final DomainCode domainCode;
+
+    public DomainException(DomainCode domainCode) {
+        super(String.format(domainCode.getMessage(), (Object) null), null);
+        this.errorCode = domainCode.toUniversalCode();
+        this.errorMessage = domainCode.getMessage();
+        this.domainCode = domainCode;
+    }
+}

@@ -1,6 +1,5 @@
 package com.menes.banking.auth_service.service.model;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
